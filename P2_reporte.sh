@@ -1,17 +1,22 @@
+updatedb
+
 oldDate=$(date +%F)
 IFS='/' read -r -a date <<< $oldDate
 mkdir -p reporte_$date/{resultados.txt,coincidencias.txt}
 
 mensajeDirection=$(locate -b '\message.txt')
-mensaje=$(cat $mensajeDirection)
-echo -e "Hola, querido usuario, estos son los resultados:\nEl mensaje oculto en el programa es:" > resultados.txt
-echo $mensaje
+mensaje=$($mensajeDirection)
+echo -e "Hola, querido usuario, estos son los resultados:\nEl mensaje oculto en el programa es: "$mensaje > resultados.txt
 
 directory=$1
-direction=$(locate -b '\$directory')
+direction=$(locate -n 1 -b '\$directory')
+echo -e "------------------ \n a"
 ls $direction
 
 file=$2
 wordSearched=$3
-result=$(grep $wordSearched $(locate -b '\$file') | sort)
+filepath=$(locate -b '\$file')
+echo $filepath
+	
+result=$(grep $wordSearched $filepath)
 echo -e "$result\n" >> coincidencias.txt
